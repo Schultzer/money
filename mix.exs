@@ -52,7 +52,7 @@ defmodule Money.Mixfile do
   def application do
     [
       mod: {Money.Application, []},
-      extra_applications: [:inets, :logger]
+      extra_applications: [:inets, :logger, :jason]
     ]
   end
 

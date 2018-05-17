@@ -52,6 +52,9 @@ defmodule Money.ExchangeRates.Retriever do
 
   @doc false
   def start_link(name, config \\ Money.ExchangeRates.config()) do
+    IO.inspect(Application.ensure_started(Money.json_library))
+    Process.sleep(5000)
+    IO.inspect(Application.ensure_started(Money.json_library))
     GenServer.start_link(__MODULE__, config, name: name)
   end
 
@@ -279,7 +282,7 @@ defmodule Money.ExchangeRates.Retriever do
   end
 
   @doc false
-  def termina(other, _config) do
+  def terminate(other, _config) do
     Logger.error("[ExchangeRates.Retriever] Terminate called with unhandled #{inspect(other)}")
   end
 

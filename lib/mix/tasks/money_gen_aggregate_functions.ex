@@ -24,7 +24,7 @@ if Code.ensure_loaded?(Ecto) do
 
       Enum.each(repos, fn repo ->
         ensure_repo(repo, args)
-        path = Path.relative_to(migrations_path(repo), Mix.Project.app_path())
+        path = Path.relative_to(migration_path(repo), Mix.Project.app_path())
         file = Path.join(path, "#{timestamp()}_#{underscore(name)}.exs")
         create_directory(path)
 
@@ -41,6 +41,17 @@ if Code.ensure_loaded?(Ecto) do
           Mix.Task.run("ecto.migrate", [repo])
         end
       end)
+    end
+
+    defp migration_path(repo) do
+      Path.join(repo_priv(repo), "migrations")
+    end
+
+    defp repo_priv(repo) do
+      config = repo.config()
+      priv = config[:priv] || "priv/#{repo |> Module.split() |> List.last() |> Macro.underscore()}"
+      app = Keyword.fetch!(config, :otp_app)
+      Path.join(Mix.Project.deps_paths[app] || File.cwd!, priv)
     end
 
     defp timestamp do
